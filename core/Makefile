@@ -4222,7 +4222,9 @@ define build-vendorimage-target
           $(if $(BUILD_BROKEN_INCORRECT_PARTITION_IMAGES),,--input-directory-filter-file $(vendorimage_intermediates)/file_list.txt) \
           $(TARGET_OUT_VENDOR) $(vendorimage_intermediates)/vendor_image_info.txt \
           $(INSTALLED_VENDORIMAGE_TARGET) $(TARGET_OUT)
-  $(call assert-max-image-size,$(INSTALLED_VENDORIMAGE_TARGET) $(RECOVERY_FROM_BOOT_PATCH),$(BOARD_VENDORIMAGE_PARTITION_SIZE))
+  # This device has a separate recovery partition; RECOVERY_FROM_BOOT_PATCH is
+  # a distinct image and must not be counted against the vendor partition.
+  $(call assert-max-image-size,$(INSTALLED_VENDORIMAGE_TARGET),$(BOARD_VENDORIMAGE_PARTITION_SIZE))
 endef
 
 $(eval $(call write-partition-file-list,$(vendorimage_intermediates)/file_list.txt,$(TARGET_OUT_VENDOR),$(INTERNAL_VENDORIMAGE_FILES)))
